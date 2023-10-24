@@ -5,8 +5,17 @@ const {
   validateSignUp,
   validateLogin,
 } = require("../middlewares/requestValidator");
-const { createUser, loginUser } = require("../controllers/authController");
+const {
+  createUser,
+  loginUser,
+  getSignup,
+  getLogin,
+  logoutUser,
+} = require("../controllers/authController");
 
+router.get("/signup", getSignup);
+router.get("/login", getLogin);
+router.get("/logout", logoutUser);
 router.post("/signup", validateSignUp, createUser);
 router.post("/login", validateLogin, loginUser);
 

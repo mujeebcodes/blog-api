@@ -1,0 +1,52 @@
+<%- include('partials/header'); -%>
+<div class="container mt-5">
+  <h1>Register</h1>
+  <% if (locals.error) { %>
+  <div class="alert alert-danger" role="alert"><%= locals.error %></div>
+  <% } %>
+  <form action="/user/signup" method="POST">
+    <div class="mb-3">
+      <label for="firstname" class="form-label">First name</label>
+      <input
+        type="text"
+        class="form-control"
+        id="firstname"
+        name="first_name"
+        required
+      />
+    </div>
+    <div class="mb-3">
+      <label for="lastname" class="form-label">Last name</label>
+      <input
+        type="text"
+        class="form-control"
+        id="lastname"
+        name="last_name"
+        required
+      />
+    </div>
+    <div class="mb-3">
+      <label for="email" class="form-label">Email</label>
+      <input
+        type="text"
+        class="form-control"
+        id="email"
+        name="email"
+        required
+      />
+    </div>
+    <div class="mb-3">
+      <label for="password" class="form-label">Password</label>
+      <input
+        type="password"
+        class="form-control"
+        id="password"
+        name="password"
+        required
+      />
+    </div>
+    <button type="submit" class="btn btn-primary">Register</button>
+  </form>
+  <p>Already have an account? Login <a href="/user/login">here</a></p>
+</div>
+<%- include('partials/footer'); -%>

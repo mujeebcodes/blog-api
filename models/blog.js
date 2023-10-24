@@ -15,4 +15,6 @@ const blogSchema = new mongoose.Schema({
   body: { type: String, required: true },
   timestamp: { type: Date, default: Date.now },
 });
-module.exports = mongoose.model("BlogModel", blogSchema);
+
+const BlogModel = mongoose.model("Blog", blogSchema);
+module.exports = BlogModel;

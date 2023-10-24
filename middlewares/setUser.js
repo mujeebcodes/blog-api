@@ -2,26 +2,25 @@ const jwt = require("jsonwebtoken");
 const UserModel = require("../models/user");
 require("dotenv").config();
 
-const tokenAuth = async (req, res, next) => {
+const setUser = async (req, res, next) => {
   const token = req.cookies.jwt;
   if (token) {
     jwt.verify(token, process.env.JWT_SECRET, async (err, decodedToken) => {
       if (err) {
         console.log(err.message);
         res.locals.user = null;
-        res.redirect("/users/login");
+        return next();
       } else {
-        req.userId = decodedToken._id;
-        let user = await UserModel.findById(decodedToken.userId);
-        console.log(user);
+        // req.userId = decodedToken._id;
+        let user = await UserModel.findById(decodedToken._id);
         res.locals.user = user;
         next();
       }
     });
   } else {
     res.locals.user = null;
-    res.redirect("login");
+    next();
   }
 };
 
-module.exports = { tokenAuth };
+module.exports = { setUser };

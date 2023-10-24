@@ -3,10 +3,7 @@ const BlogModel = require("../models/blog");
 const getAllBlogs = async (req, res) => {
   try {
     const blogs = await BlogModel.find({ state: "published" });
-    return res.status(200).json({
-      message: "success",
-      data: blogs,
-    });
+    res.render("home", { blogs });
   } catch (error) {
     console.log(error);
   }
@@ -45,4 +42,29 @@ const createBlog = async (req, res) => {
   }
 };
 
-module.exports = { getAllBlogs, getBlog, createBlog };
+const getCreateBlog = (req, res) => {
+  res.render("createblog");
+};
+
+const publishBlog = async (req, res) => {
+  const blogId = req.params.id;
+  try {
+    await BlogModel.findByIdAndUpdate(blogId, { state: "published" });
+    return res.status(200).json({
+      message: "blog published successfully",
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(400).json({
+      message: "unable to publish blog",
+    });
+  }
+};
+
+module.exports = {
+  getAllBlogs,
+  getBlog,
+  createBlog,
+  publishBlog,
+  getCreateBlog,
+};
