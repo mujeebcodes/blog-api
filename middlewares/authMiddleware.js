@@ -13,7 +13,6 @@ const tokenAuth = async (req, res, next) => {
       } else {
         req.userId = decodedToken._id;
         let user = await UserModel.findById(decodedToken.userId);
-        console.log(user);
         res.locals.user = user;
         next();
       }

@@ -3,6 +3,7 @@ const app = express();
 require("dotenv").config();
 const session = require("express-session");
 const flash = require("connect-flash");
+const methodOverride = require("method-override");
 const cookieParser = require("cookie-parser");
 const userRouter = require("./routes/auth");
 const blogRouter = require("./routes/blog");
@@ -13,6 +14,7 @@ db.connect();
 app.set("view engine", "ejs");
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(methodOverride("_method"));
 app.use(cookieParser());
 app.use(
   session({

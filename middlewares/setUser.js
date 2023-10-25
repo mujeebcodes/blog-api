@@ -11,7 +11,7 @@ const setUser = async (req, res, next) => {
         res.locals.user = null;
         return next();
       } else {
-        // req.userId = decodedToken._id;
+        req.userId = decodedToken._id;
         let user = await UserModel.findById(decodedToken._id);
         res.locals.user = user;
         next();

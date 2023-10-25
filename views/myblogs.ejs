@@ -1,0 +1,40 @@
+<%- include('partials/header'); -%>
+<h3>Your blogs</h3>
+<% if (myBlogs && myBlogs.length > 0) { %> <% myBlogs.forEach(function(blog) {
+%>
+
+<div>
+  <h4><%= blog.title %></h4>
+  <p><%= blog.description %></p>
+  <p><%= blog.body %></p>
+  <div>
+    <p><%= blog.state %></p>
+    <div class="d-flex">
+      <% if (blog.state === 'draft') { %>
+      <form action="/blog/<%= blog._id %>?_method=PUT" method="POST">
+        <button type="submit">Edit</button>
+      </form>
+      <form action="/blog/<%= blog._id %>?_method=PATCH" method="POST">
+        <button type="submit">Publish</button>
+      </form>
+      <form action="/blog/<%= blog._id %>?_method=DELETE" method="POST">
+        <button type="submit">Delete</button>
+      </form>
+      <% } else { %>
+      <form action="/blog/<%= blog._id %>?_method=PUT" method="POST">
+        <button type="submit">Edit</button>
+      </form>
+      <form action="/blog/<%= blog._id %>?_method=PATCH" method="POST">
+        <button type="submit">Unpublish</button>
+      </form>
+      <form action="/blog/<%= blog._id %>?_method=DELETE" method="POST">
+        <button type="submit">Delete</button>
+      </form>
+      <% } %>
+    </div>
+  </div>
+</div>
+<% }); %> <% } else { %>
+<p>No blogs</p>
+
+<% } %> <%- include('partials/footer'); -%>

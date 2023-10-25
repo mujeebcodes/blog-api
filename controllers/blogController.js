@@ -23,48 +23,71 @@ const getBlog = async (req, res) => {
   }
 };
 
+const getCreateBlog = (req, res) => {
+  res.render("createblog");
+};
+
 const createBlog = async (req, res) => {
   try {
     const { title, description, body } = req.body;
-    const newBlog = await BlogModel.create({
+    await BlogModel.create({
       title,
       description,
       body,
       author: req.userId,
     });
 
-    return res.status(201).json({
-      message: "success",
-      data: newBlog,
-    });
+    res.redirect("/blog/myblogs");
   } catch (error) {
     console.log(error);
   }
 };
 
-const getCreateBlog = (req, res) => {
-  res.render("createblog");
+const getMyBlogs = async (req, res) => {
+  try {
+    const myBlogs = await BlogModel.find({ author: req.userId });
+    res.render("myblogs", { myBlogs });
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 const publishBlog = async (req, res) => {
   const blogId = req.params.id;
   try {
-    await BlogModel.findByIdAndUpdate(blogId, { state: "published" });
-    return res.status(200).json({
-      message: "blog published successfully",
-    });
+    const blog = await BlogModel.findById(blogId);
+    if (blog.state === "draft") {
+      await BlogModel.findByIdAndUpdate(blogId, { state: "published" });
+    } else {
+      await BlogModel.findByIdAndUpdate(blogId, { state: "draft" });
+    }
+
+    res.redirect("/blog/myblogs");
   } catch (error) {
     console.log(error);
-    return res.status(400).json({
-      message: "unable to publish blog",
-    });
   }
 };
 
+const editBlog = async (req, res) => {
+  console.log("edited");
+};
+
+const deleteBlog = async (req, res) => {
+  try {
+    const blogId = req.params.id;
+    await BlogModel.findByIdAndDelete(blogId);
+    res.redirect("/blog/myblogs");
+  } catch (error) {
+    console.log(error);
+  }
+};
 module.exports = {
   getAllBlogs,
   getBlog,
   createBlog,
   publishBlog,
   getCreateBlog,
+  getMyBlogs,
+  editBlog,
+  deleteBlog,
 };
