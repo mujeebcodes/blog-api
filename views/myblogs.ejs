@@ -1,5 +1,17 @@
 <%- include('partials/header'); -%>
 <h3>Your blogs</h3>
+
+<div class="btn-group" role="group" aria-label="filter buttons">
+  <button type="button" class="btn btn-secondary">
+    <a href="/blog/myblogs">All</a>
+  </button>
+  <button type="button" class="btn btn-secondary">
+    <a href="/blog/myblogs/state?state=draft">Draft</a>
+  </button>
+  <button type="button" class="btn btn-secondary">
+    <a href="/blog/myblogs/state?state=published">Published</a>
+  </button>
+</div>
 <% if (myBlogs && myBlogs.length > 0) { %> <% myBlogs.forEach(function(blog) {
 %>
 
@@ -34,7 +46,19 @@
     </div>
   </div>
 </div>
-<% }); %> <% } else { %>
-<p>No blogs</p>
+<% }); %> <% if (totalPages > 1) { %>
+<nav aria-label="My Page navigation">
+  <ul class="pagination mt-4">
+    <% for (let i = 1; i <= totalPages; i++) { %>
+    <li class="page-item <%= (i == page) ? 'active' : '' %>">
+      <a class="page-link" href="?page=<%= i %>"><%= i %></a>
+    </li>
+    <% } %>
+  </ul>
+</nav>
+<% } %> <% } else { %>
+
+<p>You haven't posted any blogs.</p>
+<a href="/blog/createblog" class="btn btn-primary">Create your first blog</a>
 
 <% } %> <%- include('partials/footer'); -%>

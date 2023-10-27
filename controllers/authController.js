@@ -27,10 +27,7 @@ const createUser = async (req, res) => {
       password,
     });
 
-    return res.status(201).json({
-      status: "success",
-      data: { user: newUser },
-    });
+    res.redirect("/user/login");
   } catch (error) {
     console.log(error);
   }

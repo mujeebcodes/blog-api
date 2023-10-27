@@ -3,9 +3,18 @@ const UserModel = require("../models/user");
 const calculateReadingTime = require("../utils/readingTime");
 
 const getAllBlogs = async (req, res) => {
+  const page = req.query.page || 1;
+  const perPage = 20;
   try {
-    const blogs = await BlogModel.find({ state: "published" });
-    res.render("home", { blogs });
+    const blogs = await BlogModel.find({ state: "published" })
+      .skip(perPage * (page - 1))
+      .limit(perPage);
+
+    const totalBlogs = await (
+      await BlogModel.find({ state: "published" })
+    ).length;
+    const totalPages = Math.ceil(totalBlogs / perPage);
+    res.render("home", { blogs, totalPages, page });
   } catch (error) {
     console.log(error);
   }
@@ -55,9 +64,25 @@ const getEditBlog = async (req, res) => {
 };
 
 const getMyBlogs = async (req, res) => {
+  const page = req.query.page || 1;
+  const state = req.query.state;
+  const perPage = 5;
+  const query = { author: req.userId };
+  if (state) {
+    query.state = state;
+  }
+
   try {
-    const myBlogs = await BlogModel.find({ author: req.userId });
-    res.render("myblogs", { myBlogs });
+    const myBlogs = await BlogModel.find(query)
+      .skip(perPage * (page - 1))
+      .limit(perPage);
+
+    const totalBlogs = await (
+      await BlogModel.find({ author: req.userId })
+    ).length;
+    const totalPages = Math.ceil(totalBlogs / perPage);
+
+    res.render("myblogs", { myBlogs, totalPages, page });
   } catch (error) {
     console.log(error);
   }
