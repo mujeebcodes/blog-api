@@ -1,0 +1,12 @@
+<%- include('partials/header'); -%>
+<h2><%= blog.title %></h2>
+<p>Posted by <%= author.first_name %> <%= author.last_name %></p>
+<p>Read <%= blog.read_count %> times</p>
+<div class="card" style="width: 18rem">
+  <div class="card-body">
+    <h6 class="card-title"><%= blog.description %></h6>
+    <p class="card-text"><%= blog.body %></p>
+    <a href="/blog" class="btn btn-primary">Back</a>
+  </div>
+</div>
+<%- include('partials/footer'); -%>

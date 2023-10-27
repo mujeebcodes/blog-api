@@ -8,6 +8,7 @@ const {
   getMyBlogs,
   editBlog,
   deleteBlog,
+  getEditBlog,
 } = require("../controllers/blogController");
 const { tokenAuth } = require("../middlewares/authMiddleware");
 const { setUser } = require("../middlewares/setUser");
@@ -16,7 +17,8 @@ const router = express.Router();
 router.get("/", setUser, getAllBlogs);
 router.get("/createblog", setUser, getCreateBlog);
 router.get("/myblogs", setUser, getMyBlogs);
-router.get("/:id", getBlog);
+router.get("/:id", setUser, getBlog);
+router.get("/:id/edit", setUser, getEditBlog);
 
 router.use(tokenAuth);
 router.post("/", createBlog);

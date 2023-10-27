@@ -11,7 +11,7 @@
     <p><%= blog.state %></p>
     <div class="d-flex">
       <% if (blog.state === 'draft') { %>
-      <form action="/blog/<%= blog._id %>?_method=PUT" method="POST">
+      <form action="/blog/<%= blog._id %>/edit">
         <button type="submit">Edit</button>
       </form>
       <form action="/blog/<%= blog._id %>?_method=PATCH" method="POST">
@@ -21,7 +21,7 @@
         <button type="submit">Delete</button>
       </form>
       <% } else { %>
-      <form action="/blog/<%= blog._id %>?_method=PUT" method="POST">
+      <form action="/blog/<%= blog._id %>/edit">
         <button type="submit">Edit</button>
       </form>
       <form action="/blog/<%= blog._id %>?_method=PATCH" method="POST">

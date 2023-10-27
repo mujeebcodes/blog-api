@@ -3,11 +3,14 @@
   <h1>Latest blogs</h1>
 
   <% if (blogs && blogs.length > 0) { %> <% blogs.forEach(function(blog) { %>
-  <div class="card">
-    <!-- Render the content of each blog here -->
-    <h2><%= blog.title %></h2>
-    <p><%= blog.body %></p>
-  </div>
+  <a href="/blog/<%= blog._id %>">
+    <div class="card">
+      <!-- Render the content of each blog here -->
+      <h2><%= blog.title %></h2>
+      <p><%= blog.description %></p>
+      <span><%= blog.reading_time %> minute read</span>
+    </div>
+  </a>
   <% }); %> <% } else { %>
   <p>No blogs for now</p>
   <% } %>
