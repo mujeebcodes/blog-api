@@ -36,6 +36,17 @@ const getBlog = async (req, res) => {
   }
 };
 
+const searchBlog = async (req, res) => {
+  try {
+    let searchTerm = req.body.searchTerm;
+    const sanitizedSearchTerm = searchTerm.replace(/[^a-zA-Z0-9 ]/g, "");
+    const results = await BlogModel;
+    res.render("search-results");
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 const getCreateBlog = (req, res) => {
   res.render("createblog");
 };
@@ -132,6 +143,7 @@ const deleteBlog = async (req, res) => {
 module.exports = {
   getAllBlogs,
   getBlog,
+  searchBlog,
   createBlog,
   publishBlog,
   getCreateBlog,

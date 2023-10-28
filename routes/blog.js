@@ -9,6 +9,7 @@ const {
   editBlog,
   deleteBlog,
   getEditBlog,
+  searchBlog,
 } = require("../controllers/blogController");
 const { tokenAuth } = require("../middlewares/authMiddleware");
 const { setUser } = require("../middlewares/setUser");
@@ -20,6 +21,7 @@ router.get("/myblogs", setUser, getMyBlogs);
 router.get("/myblogs/state", setUser, getMyBlogs);
 router.get("/:id", setUser, getBlog);
 router.get("/:id/edit", setUser, getEditBlog);
+router.post("/search", setUser, searchBlog);
 
 router.use(tokenAuth);
 router.post("/", createBlog);
