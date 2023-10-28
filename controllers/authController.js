@@ -3,7 +3,9 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
 const getLogin = (req, res) => {
-  res.render("login");
+  const error = req.flash("error");
+  const success = req.flash("success");
+  res.render("login", { error, success });
 };
 
 const getSignup = (req, res) => {
@@ -26,9 +28,10 @@ const createUser = async (req, res) => {
       email,
       password,
     });
-
+    req.flash("success", "Account created successfully. Please login");
     res.redirect("/user/login");
   } catch (error) {
+    await req.flash("error");
     console.log(error);
   }
 };
@@ -45,19 +48,22 @@ const loginUser = async (req, res) => {
       );
 
       res.cookie("jwt", token, { httpOnly: true, maxAge: 3600000 });
+      req.flash("success", "Logged in successfully");
       res.redirect("/blog");
     } else {
       req.flash("error", "Invalid username or password.");
+      res.redirect("/user/login");
     }
   } catch (error) {
     console.log(error);
     req.flash("error", "Login failed. Please try again.");
-    res.redirect("login");
+    res.redirect("/user/login");
   }
 };
 
 const logoutUser = (req, res) => {
   res.clearCookie("jwt");
+  req.flash("success", "Logged out successfully");
   res.redirect("/blog");
 };
 

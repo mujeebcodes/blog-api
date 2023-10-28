@@ -1,4 +1,6 @@
-<%- include('partials/header'); -%>
+<%- include('partials/header'); -%> <% if (success && success.length > 0 ) { %>
+<div class="alert alert-success" role="alert"><%= success %></div>
+<% } %>
 <h3>Your blogs</h3>
 
 <div class="btn-group" role="group" aria-label="filter buttons">
@@ -6,15 +8,15 @@
     <a href="/blog/myblogs">All</a>
   </button>
   <button type="button" class="btn btn-secondary">
-    <a href="/blog/myblogs/state?state=draft">Draft</a>
+    <a href="/blog/myblogs/?state=draft">Draft</a>
   </button>
   <button type="button" class="btn btn-secondary">
-    <a href="/blog/myblogs/state?state=published">Published</a>
+    <a href="/blog/myblogs/?state=published">Published</a>
   </button>
 </div>
+
 <% if (myBlogs && myBlogs.length > 0) { %> <% myBlogs.forEach(function(blog) {
 %>
-
 <div>
   <h4><%= blog.title %></h4>
   <p><%= blog.description %></p>
@@ -56,9 +58,9 @@
     <% } %>
   </ul>
 </nav>
-<% } %> <% } else { %>
-
+<% } %> <% } else { %> <% if (state) { %>
+<p>No blog in this state.</p>
+<% } else { %>
 <p>You haven't posted any blogs.</p>
 <a href="/blog/createblog" class="btn btn-primary">Create your first blog</a>
-
-<% } %> <%- include('partials/footer'); -%>
+<% } %> <% } %> <%- include('partials/footer'); -%>

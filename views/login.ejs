@@ -2,8 +2,10 @@
 <div class="container mt-5">
   <h1>Login</h1>
 
-  <% if (locals.error) { %>
-  <div class="alert alert-danger" role="alert"><%= locals.error %></div>
+  <% if (error && error.length >0) { %>
+  <div class="alert alert-danger" role="alert"><%= error %></div>
+  <% } %> <% if (success && success.length > 0 ) { %>
+  <div class="alert alert-success" role="alert"><%= success %></div>
   <% } %>
   <form action="/user/login" method="POST">
     <div class="mb-3">

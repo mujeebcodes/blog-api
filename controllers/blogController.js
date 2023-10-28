@@ -3,10 +3,14 @@ const UserModel = require("../models/user");
 const calculateReadingTime = require("../utils/readingTime");
 
 const getAllBlogs = async (req, res) => {
+  const success = req.flash("success");
   const page = req.query.page || 1;
   const perPage = 20;
+  const sortField = req.query.sortby || "timestamp";
+
   try {
     const blogs = await BlogModel.find({ state: "published" })
+      .sort({ [sortField]: -1 })
       .skip(perPage * (page - 1))
       .limit(perPage);
 
@@ -14,7 +18,7 @@ const getAllBlogs = async (req, res) => {
       await BlogModel.find({ state: "published" })
     ).length;
     const totalPages = Math.ceil(totalBlogs / perPage);
-    res.render("home", { blogs, totalPages, page });
+    res.render("home", { blogs, totalPages, page, success });
   } catch (error) {
     console.log(error);
   }
@@ -55,8 +59,6 @@ const searchBlog = async (req, res) => {
         },
       ],
     });
-
-    console.log(results, results.length);
     res.render("search-results", {
       results,
       length: results.length,
@@ -81,7 +83,10 @@ const createBlog = async (req, res) => {
       reading_time: calculateReadingTime(body),
       author: req.userId,
     });
-
+    req.flash(
+      "success",
+      "Blog created successfully. You can publish it now for the world to see!"
+    );
     res.redirect("/blog/myblogs");
   } catch (error) {
     console.log(error);
@@ -95,6 +100,7 @@ const getEditBlog = async (req, res) => {
 };
 
 const getMyBlogs = async (req, res) => {
+  const success = req.flash("success");
   const page = req.query.page || 1;
   const state = req.query.state;
   const perPage = 5;
@@ -113,7 +119,7 @@ const getMyBlogs = async (req, res) => {
     ).length;
     const totalPages = Math.ceil(totalBlogs / perPage);
 
-    res.render("myblogs", { myBlogs, totalPages, page });
+    res.render("myblogs", { myBlogs, totalPages, page, state, success });
   } catch (error) {
     console.log(error);
   }
@@ -128,7 +134,7 @@ const publishBlog = async (req, res) => {
     } else {
       await BlogModel.findByIdAndUpdate(blogId, { state: "draft" });
     }
-
+    req.flash("success", "Blog published. Everyone can see it now!");
     res.redirect("/blog/myblogs");
   } catch (error) {
     console.log(error);
@@ -145,6 +151,7 @@ const editBlog = async (req, res) => {
       body,
       reading_time: calculateReadingTime(body),
     });
+    req.flash("success", "Blog edited successfully");
     res.redirect("/blog/myblogs");
   } catch (error) {
     console.log(error);
@@ -155,6 +162,7 @@ const deleteBlog = async (req, res) => {
   try {
     const blogId = req.params.id;
     await BlogModel.findByIdAndDelete(blogId);
+    req.flash("success", "Blog deleted successfully");
     res.redirect("/blog/myblogs");
   } catch (error) {
     console.log(error);

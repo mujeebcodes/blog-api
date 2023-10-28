@@ -18,7 +18,7 @@ const router = express.Router();
 router.get("/", setUser, getAllBlogs);
 router.get("/createblog", setUser, getCreateBlog);
 router.get("/myblogs", setUser, getMyBlogs);
-router.get("/myblogs/state", setUser, getMyBlogs);
+// router.get("/myblogs/state", setUser, getMyBlogs);
 router.get("/:id", setUser, getBlog);
 router.get("/:id/edit", setUser, getEditBlog);
 router.post("/search", setUser, searchBlog);
