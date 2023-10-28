@@ -1,2 +1,18 @@
-<%- include('partials/header'); -%> <%- include('partials/searchbar'); -%> <%-
-include('partials/footer'); -%>
+<%- include('partials/header'); -%> <%- include('partials/searchbar'); -%>
+<div class="container mt-5">
+  <h1>Found <%= length %> results for "<%= searchTerm %>"</h1>
+
+  <% if (results && length > 0) { %> <% results.forEach(function(blog) { %>
+  <a href="/blog/<%= blog._id %>">
+    <div class="card">
+      <!-- Render the content of each blog here -->
+      <h2><%= blog.title %></h2>
+      <p><%= blog.description %></p>
+      <span><%= blog.reading_time %> minute read</span>
+    </div>
+  </a>
+  <% }); %> <% } else { %>
+  <p>Found no matches</p>
+  <% } %>
+</div>
+<%-include('partials/footer'); -%>

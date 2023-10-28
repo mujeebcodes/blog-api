@@ -40,8 +40,28 @@ const searchBlog = async (req, res) => {
   try {
     let searchTerm = req.body.searchTerm;
     const sanitizedSearchTerm = searchTerm.replace(/[^a-zA-Z0-9 ]/g, "");
-    const results = await BlogModel;
-    res.render("search-results");
+    const results = await BlogModel.find({
+      $or: [
+        { title: { $regex: sanitizedSearchTerm, $options: "i" } },
+        {
+          author: {
+            $in: await UserModel.find({
+              $or: [
+                { first_name: { $regex: sanitizedSearchTerm, $options: "i" } },
+                { last_name: { $regex: sanitizedSearchTerm, $options: "i" } },
+              ],
+            }).distinct("_id"),
+          },
+        },
+      ],
+    });
+
+    console.log(results, results.length);
+    res.render("search-results", {
+      results,
+      length: results.length,
+      searchTerm,
+    });
   } catch (error) {
     console.log(error);
   }
