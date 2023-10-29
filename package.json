@@ -4,7 +4,8 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "test": "set PORT=4000 && jest --detectOpenHandles"
+    "test": "set PORT=4000 && jest --detectOpenHandles",
+    "start": "node app.js"
   },
   "keywords": [],
   "author": "",
