@@ -1,14 +1,15 @@
 const { createLogger, transports, format } = require("winston");
+const path = require("path");
 
 const authLogger = createLogger({
   transports: [
     new transports.File({
-      filename: "user.log",
+      filename: path.join(__dirname, "user.log"),
       level: "info",
       format: format.combine(format.timestamp(), format.json()),
     }),
     new transports.File({
-      filename: "user-error.log",
+      filename: path.join(__dirname, "user-error.log"),
       level: "error",
       format: format.combine(format.timestamp(), format.json()),
     }),
@@ -18,12 +19,12 @@ const authLogger = createLogger({
 const blogLogger = createLogger({
   transports: [
     new transports.File({
-      filename: "blog.log",
+      filename: path.join(__dirname, "blog.log"),
       level: "info",
       format: format.combine(format.timestamp(), format.json()),
     }),
     new transports.File({
-      filename: "blog-error.log",
+      filename: path.join(__dirname, "blog-error.log"),
       level: "error",
       format: format.combine(format.timestamp(), format.json()),
     }),
@@ -32,12 +33,12 @@ const blogLogger = createLogger({
 const tokenAuthLogger = createLogger({
   transports: [
     new transports.File({
-      filename: "token.log",
+      filename: path.join(__dirname, "token.log"),
       level: "info",
       format: format.combine(format.timestamp(), format.json()),
     }),
     new transports.File({
-      filename: "token-error.log",
+      filename: path.join(__dirname, "token-error.log"),
       level: "error",
       format: format.combine(format.timestamp(), format.json()),
     }),

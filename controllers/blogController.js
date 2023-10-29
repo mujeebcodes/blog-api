@@ -1,6 +1,6 @@
 const BlogModel = require("../models/blog");
 const UserModel = require("../models/user");
-const { blogLogger } = require("../logger");
+const { blogLogger } = require("../logs/logger");
 const calculateReadingTime = require("../utils/readingTime");
 
 const getAllBlogs = async (req, res) => {

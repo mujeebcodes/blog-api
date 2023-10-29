@@ -1,7 +1,7 @@
 const UserModel = require("../models/user");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const { authLogger } = require("../logger");
+const { authLogger } = require("../logs/logger");
 
 const getLogin = (req, res) => {
   const error = req.flash("error");
