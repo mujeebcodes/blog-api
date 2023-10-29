@@ -1,5 +1,6 @@
 const BlogModel = require("../models/blog");
 const UserModel = require("../models/user");
+const { blogLogger } = require("../logger");
 const calculateReadingTime = require("../utils/readingTime");
 
 const getAllBlogs = async (req, res) => {
@@ -18,9 +19,10 @@ const getAllBlogs = async (req, res) => {
       await BlogModel.find({ state: "published" })
     ).length;
     const totalPages = Math.ceil(totalBlogs / perPage);
+    // blogLogger.info("Fetched all blogs successfully");
     res.render("home", { blogs, totalPages, page, success });
   } catch (error) {
-    console.log(error);
+    blogLogger.error(`Error getting blogs: ${error.message}`);
   }
 };
 
@@ -33,10 +35,9 @@ const getBlog = async (req, res) => {
       { new: true }
     );
     const author = await UserModel.findById({ _id: blog.author });
-
     res.render("blog", { blog, author });
   } catch (error) {
-    console.log(error);
+    blogLogger.error(`Error getting blog: ${error.message}`);
   }
 };
 
@@ -65,7 +66,7 @@ const searchBlog = async (req, res) => {
       searchTerm,
     });
   } catch (error) {
-    console.log(error);
+    blogLogger.error(`Error during search: ${error.message}`);
   }
 };
 
@@ -87,9 +88,10 @@ const createBlog = async (req, res) => {
       "success",
       "Blog created successfully. You can publish it now for the world to see!"
     );
+    blogLogger.info("New blog created!");
     res.redirect("/blog/myblogs");
   } catch (error) {
-    console.log(error);
+    blogLogger.error(`Unable to create new blog: ${error.message}`);
   }
 };
 
@@ -121,7 +123,9 @@ const getMyBlogs = async (req, res) => {
 
     res.render("myblogs", { myBlogs, totalPages, page, state, success });
   } catch (error) {
-    console.log(error);
+    blogLogger.error(
+      `Error getting blogs created by user ${req.userId}: ${error.message}`
+    );
   }
 };
 
@@ -137,7 +141,7 @@ const publishBlog = async (req, res) => {
     req.flash("success", "Blog published. Everyone can see it now!");
     res.redirect("/blog/myblogs");
   } catch (error) {
-    console.log(error);
+    blogLogger.error(`Error publishing blog: ${error.message}`);
   }
 };
 
@@ -154,7 +158,7 @@ const editBlog = async (req, res) => {
     req.flash("success", "Blog edited successfully");
     res.redirect("/blog/myblogs");
   } catch (error) {
-    console.log(error);
+    blogLogger.error(`Error editing blog: ${error.message}`);
   }
 };
 
@@ -165,7 +169,7 @@ const deleteBlog = async (req, res) => {
     req.flash("success", "Blog deleted successfully");
     res.redirect("/blog/myblogs");
   } catch (error) {
-    console.log(error);
+    blogLogger.error(`Error deleting blog: ${error.message}`);
   }
 };
 module.exports = {

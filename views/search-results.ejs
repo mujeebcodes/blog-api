@@ -3,8 +3,8 @@
   <h1>Found <%= length %> results for "<%= searchTerm %>"</h1>
 
   <% if (results && length > 0) { %> <% results.forEach(function(blog) { %>
-  <a href="/blog/<%= blog._id %>">
-    <div class="card">
+  <a class="text-decoration-none" href="/blog/<%= blog._id %>">
+    <div class="card mb-4">
       <!-- Render the content of each blog here -->
       <h2><%= blog.title %></h2>
       <p><%= blog.description %></p>

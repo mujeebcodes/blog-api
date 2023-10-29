@@ -1,6 +1,7 @@
 const UserModel = require("../models/user");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const { authLogger } = require("../logger");
 
 const getLogin = (req, res) => {
   const error = req.flash("error");
@@ -18,9 +19,8 @@ const createUser = async (req, res) => {
       email,
     });
     if (isExistingUser) {
-      return res.status(409).json({
-        message: "User already exists, please login",
-      });
+      req.flash("error", "User already exists, please login instead");
+      res.redirect("/user/signup");
     }
     const newUser = await UserModel.create({
       first_name,
@@ -28,11 +28,14 @@ const createUser = async (req, res) => {
       email,
       password,
     });
+    authLogger.info(
+      `Account creation for ${newUser.first_name} ${newUser.last_name} successful`
+    );
     req.flash("success", "Account created successfully. Please login");
     res.redirect("/user/login");
   } catch (error) {
-    await req.flash("error");
-    console.log(error);
+    req.flash("error", "Unable to create account. Please try again later");
+    authLogger.error(`Error creating account: ${error.message}`);
   }
 };
 
@@ -48,6 +51,9 @@ const loginUser = async (req, res) => {
       );
 
       res.cookie("jwt", token, { httpOnly: true, maxAge: 3600000 });
+      authLogger.info(
+        `Logged in ${user.first_name} ${user.last_name} successfully`
+      );
       req.flash("success", "Logged in successfully");
       res.redirect("/blog");
     } else {
@@ -55,7 +61,7 @@ const loginUser = async (req, res) => {
       res.redirect("/user/login");
     }
   } catch (error) {
-    console.log(error);
+    authLogger.error(`Login failed. Please try again: ${error.message}`);
     req.flash("error", "Login failed. Please try again.");
     res.redirect("/user/login");
   }
@@ -63,6 +69,7 @@ const loginUser = async (req, res) => {
 
 const logoutUser = (req, res) => {
   res.clearCookie("jwt");
+  authLogger.info("Logged out successfully");
   req.flash("success", "Logged out successfully");
   res.redirect("/blog");
 };
